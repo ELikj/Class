@@ -78,6 +78,18 @@ ELi['cms/admin_type'] = {
               ,"增加"
             ]:"",
 
+            'int1($$)扩展int($$)text($$)($$)扩展int($$)'+D.int1,
+            'float1($$)浮点1($$)text($$)($$)扩展浮点($$)'+D.float1,
+            'float2($$)浮点2($$)text($$)($$)浮点2($$)'+D.float2,
+            [
+              'text1',
+              "扩展文本",
+              "textarea",
+              'height:88px;',
+              ''
+              ,
+              D.text1
+            ],
             
             'uid($$)所属用户($$)text($$)($$)所属用户($$)'+D.uid,
             'adminuid($$)管理员($$)text($$)($$)管理员($$)'+D.adminuid,

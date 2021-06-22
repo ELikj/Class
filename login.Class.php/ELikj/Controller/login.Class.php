@@ -319,8 +319,9 @@ class ELikj_login{
         if($TUID  > 0){
             ELihhSet(['tuid'=>$TUID ]);
         }
-        tiaozhuan(WZHOST);
-        return ;
+        global $SESSIONID;
+        tiaozhuan(WZHOST.'?apptoken='.$SESSIONID);
+        return "";
     }
 
     function Construct($CANSHU,$features){

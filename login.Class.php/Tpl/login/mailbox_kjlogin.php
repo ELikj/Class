@@ -15,8 +15,13 @@ $fcode    =  $_POST['fcode'] ?? "";
 $code     =  $_POST['code'] ?? "";
 
 $chauid = ELihhGet("uid");
-if($chauid){
-    return echoapptoken([],1, $THIS ->Lang("login_true") );
+if($chauid && $chauid > 0){
+    $USER = uid( $chauid );
+    if(!$USER || $USER['accountoff'] != 1){
+        return echoapptoken([],-1, $THIS ->Lang("accountoff"),$SESSIONID   );
+    }
+    $USER['avatar'] = pichttp($USER['avatar']==""?"Tpl/login/avatar/".($USER['id']%10).".png":$USER['avatar']);
+    return echoapptoken($USER,1, $THIS ->Lang("login_true"),$SESSIONID  );
 }
 
 if( !$THIS ->Isemail ($account) ){
@@ -90,4 +95,5 @@ if($USER['accountoff'] != 1){
 
 ELihhSet(['uid'=>$user['uid']]);
 ELilog( 'userlog' , $user['uid'] , 0 , [] , 'account_login' , $THIS-> plugin );
-return echoapptoken([],1, $THIS ->Lang("login_true") );
+$USER['avatar'] = pichttp($USER['avatar']==""?"Tpl/login/avatar/".($USER['id']%10).".png":$USER['avatar']);
+return echoapptoken($USER,1, $THIS ->Lang("login_true"),$SESSIONID );

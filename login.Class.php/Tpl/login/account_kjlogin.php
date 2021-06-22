@@ -6,15 +6,15 @@
  * 代码协议：开源代码协议 Apache License 2.0 详见 http://www.apache.org/licenses/
  */
 /*
-phone  登陆账号 2-32
+account  登陆账号 2-32
 password 登陆密码 6-64
 code     验证码
 */
-$account  =  $_POST['phone'] ?? "";
-$fcode    =  $_POST['fcode'] ?? "";
+$account  =  ELiSecurity($_POST['account'] ?? "");
+$password =  $_POST['password'] ?? "";
 $code     =  $_POST['code'] ?? "";
-
 $chauid = ELihhGet("uid");
+
 if($chauid && $chauid > 0){
     $USER = uid( $chauid );
     if(!$USER || $USER['accountoff'] != 1){
@@ -25,40 +25,35 @@ if($chauid && $chauid > 0){
 }
 
 
-if( !$THIS ->Isshouji ($account) ){
-    return echoapptoken([],-1, $THIS ->Lang('phone_error'));
+if(strlen($account ) < 2 || strlen($account ) > 32){
+    return echoapptoken([],-1,  $THIS ->Lang('account_error')  );
+} 
+
+if(strlen($password ) < 6 || strlen($password ) > 64){
+    return echoapptoken([],-1, $THIS ->Lang('password_error') );
 }
 
-
-$codeoff  = Plusconfig("phone验证码")??0;
+$codeoff  = Plusconfig("account验证码")??0;
 if($codeoff > 0){
-    if( $code == '' || $code != ELihhGet('code') ){
-        return echoapptoken([],-1, $THIS ->Lang('vcode_error') );
+    if( $code =='' || $code != ELihhGet('code')){
+        return echoapptoken([],-1, $THIS ->Lang('code_error') );
     }
 }
 
 $HASH = "security/".ip();
 if( (int)$ELiMem ->g($HASH) > $THIS ->securitynum){
-    return echoapptoken([],-1, $THIS ->Lang("phone_no")  );
-}
-$GetCode = $THIS ->GetCode($account);
-if(!$GetCode){
-    return echoapptoken([],-1, $THIS ->Lang("fasong_code") );
+    return echoapptoken([],-1, $THIS ->Lang("account_no")  );
 }
 
-if((int)$GetCode != (int)$fcode){
-    return echoapptoken([],-1,$THIS ->Lang( "code_error") );
-}
-
-$db = db("login_phone");
-$user = $db ->where( [ 'phone' => $account ] )->find();
+$db = db("login_account");
+$user = $db ->where( [ 'account' => $account ] )->find();
 
 if(!$user){
-    /* 开启快捷注册 */
+
     $kjreg  = Plusconfig("快捷注册") ?? 0;
     if( $kjreg < 1 ){
-        $ELiMem ->ja($HASH,1, $THIS ->securitytime );
-        return echoapptoken([],-1, $THIS ->Lang("phone_no")  );
+        $ELiMem ->ja($HASH,1, $THIS ->securitytime);
+        return echoapptoken([],-1, $THIS ->Lang("account_no")  );
     }
 
     $uid = $THIS -> REG( 
@@ -74,10 +69,9 @@ if(!$user){
     if(!$uid){
         return echoapptoken([],-1, $THIS ->Lang("uuid_error") );
     }
-
     $user =[
-        'phone'=> $account,
-        'password'=> '',
+        'account'=> $account,
+        'password'=>  ELimm($password),
         'uid' => $uid
     ];
     
@@ -85,16 +79,22 @@ if(!$user){
     if(!$fan){
         return echoapptoken([],-1, $THIS ->Lang('reg_false') );
     }
+   
 }
 
-$THIS ->DelCode($account);
+if( ELimm($password) != $user['password']){
+    $ELiMem ->ja($HASH,1, $THIS ->securitytime );
+    return echoapptoken([],-1, $THIS ->Lang("password_no") );
+}
+
 $ELiMem ->d($HASH);
 $USER = uid( $user['uid'] );
+
 if($USER['accountoff'] != 1){
     return echoapptoken([],-1, $THIS ->Lang("accountoff") );
 }
 
 ELihhSet(['uid'=>$user['uid']]);
-ELilog( 'userlog' , $user['uid'] , 0 , [] , 'account_login' , $THIS-> plugin );
+ELilog('userlog',$user['uid'],0,[],'account_login',$THIS-> plugin );
 $USER['avatar'] = pichttp($USER['avatar']==""?"Tpl/login/avatar/".($USER['id']%10).".png":$USER['avatar']);
-return echoapptoken($USER,1, $THIS ->Lang("login_true"),$SESSIONID );
+return echoapptoken($USER,1, $THIS ->Lang("login_true"),$SESSIONID  );

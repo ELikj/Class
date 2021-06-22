@@ -51,7 +51,6 @@ if (strpos( $_SERVER["HTTP_USER_AGENT"] , "Messenger") !== false) {
 </html>
 <script src="<?php echo $ELiConfig['cdnhost'];?>Tpl/jquery.js"></script>
 <script src="<?php echo $ELiConfig['cdnhost'];?>Tpl/qrcode.min.js"></script>
-
 <script type="text/javascript">
 window.UIMUI =[];
 var NUM = 0;

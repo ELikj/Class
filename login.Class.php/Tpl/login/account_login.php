@@ -43,8 +43,12 @@ $db = db("login_account");
 $user = $db ->where( [ 'account' => $account ] )->find();
 
 if(!$user){
+
+
     $ELiMem ->ja($HASH,1, $THIS ->securitytime);
     return echoapptoken([],-1, $THIS ->Lang("account_no")  );
+    
+
 }
 
 if( ELimm($password) != $user['password']){
