@@ -79,6 +79,7 @@ ELi['cms/admin_type'] = {
             ]:"",
 
             'int1($$)扩展int($$)text($$)($$)扩展int($$)'+D.int1,
+            'int2($$)扩展int2($$)text($$)($$)扩展int2($$)'+D.int2,
             'float1($$)浮点1($$)text($$)($$)扩展浮点($$)'+D.float1,
             'float2($$)浮点2($$)text($$)($$)浮点2($$)'+D.float2,
             [

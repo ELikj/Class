@@ -80,6 +80,7 @@ ELi['cms/admin_content'] = {
         ],
        
         'int1($$)扩展int($$)text($$)($$)扩展int($$)'+D.int1,
+        'int2($$)扩展int2($$)text($$)($$)扩展int2($$)'+D.int2,
         'float1($$)浮点1($$)text($$)($$)扩展浮点($$)'+D.float1,
         'float2($$)浮点2($$)text($$)($$)浮点2($$)'+D.float2,
         [
@@ -252,7 +253,7 @@ ELi['cms/admin_content'] = {
     });
     },add() {
       ELi['cms/admin_content'].edit({
-          data: { "int1":0,"float1":"0.00","float2":"0.00","text1":"","id":"0","name":"","keywords":"","describes":"","subclass":ELi['cms/admin_content'].MORENID,"url":"","link":"","listtemplate":"","contenttemplate":"","uid":"0","adminuid":"0","recommend":"0","sortsize":"0","popularity":"0","photo":"","photoalbum":"","content":"","expansion":"","expansionform":"","atime":"0","xtime":"0","displayswitch":"0","off":"2","remarks":""}
+          data: { "int2":0,"int1":0,"float1":"0.00","float2":"0.00","text1":"","id":"0","name":"","keywords":"","describes":"","subclass":ELi['cms/admin_content'].MORENID,"url":"","link":"","listtemplate":"","contenttemplate":"","uid":"0","adminuid":"0","recommend":"0","sortsize":"0","popularity":"0","photo":"","photoalbum":"","content":"","expansion":"","expansionform":"","atime":"0","xtime":"0","displayswitch":"0","off":"2","remarks":""}
       }, 'add');
 
   },get() {

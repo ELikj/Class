@@ -254,10 +254,33 @@ class ELikj_login{
                 }
             }
             if($isdownffile){
+
                 if(!is_file($WJIAN) ){
+
                     $wejian =  ELiget($CANSHU['tou']);
                     if($wejian){
-                        file_put_contents( $WJIAN, $wejian);
+                        $houzui = explode("?",$CANSHU['tou']);
+                        $name = explode("/",$houzui['0']);
+                        $name = end($name).'.png';
+                        $linshitmep = ELiTempPath . md5($name . uuid()) . '.temp';
+                        file_put_contents( $linshitmep, $wejian);
+                        $type = "";
+                        $file = $_GET['uplx'] = 'all';
+                        $_FILES[$file] = [
+                            'name' => $name,
+                            'type' => $type,
+                            'tmp_name' => $linshitmep,
+                            'error' => 0,
+                            'size' => strlen($wejian)
+                        ];
+                        $fan = upload();
+                        if($fan && $fan['code'] ==1){
+                            $pic = $fan['content']['pic'];
+                            $fan =$db  ->setbiao("user") ->where(['id'=>$uid])->update(['avatar'=>$pic]);
+                            if($fan){
+                                uid($uid,1);
+                            }
+                        }
                     }
                 }
             }
@@ -289,6 +312,9 @@ class ELikj_login{
             if(isset( $BACKCAN['tiaozhuan'] )){
                 tiaozhuan($BACKCAN['tiaozhuan']);
             }else{
+                if($BACKCAN['USER']){
+                    $BACKCAN['USER']['avatar'] = pichttp($BACKCAN['USER']['avatar']==""?"Tpl/cms/qqa/style/".($BACKCAN['USER']['id']%10).".png":$BACKCAN['USER']['avatar']);
+                }
                 return  echoapptoken($BACKCAN,1,"登陆成功"); 
             }
         }else{
